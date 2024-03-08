@@ -21,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('short-url')->group(function () {
     Route::post('/', [ShortUrlController::class, 'store']);
+    Route::delete('/{id}', [ShortUrlController::class, 'destroy'])->whereNumber('id');
 });

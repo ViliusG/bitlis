@@ -10,4 +10,9 @@ class ShortUrlService
     {
         return ShortUrl::create($request);
     }
+
+    public function deleteById($id): void
+    {
+        ShortUrl::findOrFail($id)->delete();
+    }
 }
