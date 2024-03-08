@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ShortUrlController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,3 +24,5 @@ Route::prefix('short-url')->group(function () {
     Route::post('/', [ShortUrlController::class, 'store']);
     Route::delete('/{id}', [ShortUrlController::class, 'destroy'])->whereNumber('id');
 });
+
+Route::get('/{key}', [RedirectController::class, 'redirect'])->whereAlphaNumeric('key');
