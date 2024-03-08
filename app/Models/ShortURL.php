@@ -10,4 +10,6 @@ class ShortURL extends Model
     use HasFactory;
 
     protected $table = 'short_urls';
+
+    protected $fillable = ['user_id', 'original_url', 'short_url', 'expires_at'];
 }
