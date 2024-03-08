@@ -38,7 +38,8 @@ class ShortUrlUpsertRequest extends FormRequest
             'shortUrl' => [
                 'string',
                 'max:255',
-                Rule::unique('short_urls', 'short_url')
+                Rule::unique('short_urls', 'short_url'),
+                Rule::unique('reserved_urls', 'reserved_url')
             ],
             'expiresAt' => 'date|after:now',
         ];
