@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\App\Http\Controllers;
+namespace Tests\Feature\App\Http\Controllers;
 
 use App\Models\ShortURL;
 use App\Models\User;

@@ -7,6 +7,7 @@
 - Clone the repository
 - Run ```composer install``` from the project root directory
 - copy .env.example to .env
+- run ```php artisan key:generate``` to generate application key
 
 ### Database
 
@@ -27,6 +28,8 @@ php artisan migrate --seed
 
 Run ```php artisan serve``` from project directory
 
+### Tests
+To run tests you can simply run ```php artisan test```
 ### Calling endpoints
 
 Make sure you include the following in your headers
