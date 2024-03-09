@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class ShortUrlUpsertRequest extends FormRequest
@@ -20,12 +22,12 @@ class ShortUrlUpsertRequest extends FormRequest
 
     public function getShortUrl():string
     {
-        return $this->input('shortUrl');
+        return $this->input('shortUrl') ?? Str::random(Config::get('urls.random_url_length'));
     }
 
     public function getExpiresAt(): Carbon
     {
-        $expiresAt = $this->input('expireInDays') ?? config('urls.default_expiry_time');
+        $expiresAt = $this->input('expireInDays') ?? Config::get('urls.default_expiry_time');
 
         return Carbon::now()->addDays($expiresAt);
     }
@@ -37,11 +39,12 @@ class ShortUrlUpsertRequest extends FormRequest
             'originalUrl' => 'required|url|max:2048',
             'shortUrl' => [
                 'string',
+                'alpha_num',
                 'max:255',
                 Rule::unique('short_urls', 'short_url'),
                 Rule::unique('reserved_urls', 'reserved_url')
             ],
-            'expiresAt' => 'date|after:now',
+            'expireInDays' => 'int|min:1',
         ];
     }
 

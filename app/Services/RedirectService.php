@@ -8,6 +8,9 @@ class RedirectService
 {
     public function getLink(string $key): string
     {
-        return ShortUrl::where('short_url', $key)->firstOrFail()->original_url;
+        return ShortUrl::where('short_url', $key)
+            ->where('expires_at', '>', now())
+            ->firstOrFail()
+            ->original_url;
     }
 }

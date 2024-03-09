@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ShortUrlUpsertRequest;
 use App\Services\ShortUrlService;
+use Carbon\Carbon;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -20,9 +21,10 @@ class ShortUrlController extends BaseController
 
         return response()->json([
             'id' => $shortUrl->id,
+            'userId' => $shortUrl->user_id,
             'originalUrl' => $shortUrl->original_url,
             'shortUrl' => Str::finish(Config::get('app.url'), '/') . $shortUrl->short_url,
-            'expiryDate' => $shortUrl->expires_at
+            'expiryDate' => Carbon::parse($shortUrl->expires_at)->format('Y-m-d'),
         ]);
     }
 
