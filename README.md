@@ -83,23 +83,14 @@ already taken
 
 ## Possible improvements
 
-- Implement API Resources to have control of what's returned and how things are formatted (eg. dates)
-- Not an improvement, but consideration for variable, table and column namings. Instead of  having
-  short_urls.original_url and short_urls.short_url fields it'd be possible to name them urls.original and urls.short
-  to avoid redundancy but all of that depends on developer and team preference.
-- Authentication of course. Now there is no protection and everyone can delete everything. Saying this user id should 
-not be passed in body of request, rather authentication token should be passed and user identified that way.
+- Implement API Resources 
+- Database naming can be considered a bit redundant (short_urls.short_url), but I find it clear that way. 
+- Authentication of course. Now everyone can delete everything.
 - Implement DTOs to pass data in structured way instead of arrays
 - Be more flexible with original url format (don't require https://) by implementing custom rules
 - Swagger for docs
-- Store expire in days choice to see how long was it maintained. Now I'm only getting expireInDays int and converting 
-it to date straight away
 - Exception handling so opening a link the error message doesn't show the model name
 - Not a possible but a must improvement is to adjust random short url generation so that it doesn't fail if random is
-accidentally repeated. I'd do this in connection with a DTO implementation. I'd leave shortUrl parameter as nullable,
-create a generateRandomUrl() method and try to create the record in a loop until it succeeds. Alternatively more 
-predictable random password generation would be possible, then there would be less guessing. Saying that it's already
-clear that some sort of logging is needed if the DB gets too full, and we start running out of free urls. Then we could
-adjust the length of url, take decision on what to do with expired urls (delete, flag, archive).
+  accidentally repeated.
 - Short url passed as empty string could be generated randomly instead of being rejected
 - Case sensitivity for short urls. Decision needed on how should they be handled and treated.
