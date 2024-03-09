@@ -4,7 +4,9 @@
 
 ### Project
 
-TODO
+- Clone the repository
+- Run ```composer install``` from the project root directory
+- copy .env.example to .env
 
 ### Database
 
@@ -21,6 +23,9 @@ It will also populate the reserved urls table.
 ```
 php artisan migrate --seed
 ```
+### Run the project
+
+Run ```php artisan serve``` from project directory
 
 ### Calling endpoints
 
@@ -28,6 +33,37 @@ Make sure you include the following in your headers
 ```
 Accept: application/json
 ```
+There are only 3 endpoints so I'm going to document them here. Normally it'd be done through swagger.
+
+#### Create short URL
+POST /api/short-url
+
+Request body example (shortUrl and expireInDays are optional fields)
+```json
+{
+    "userId": 1,
+    "originalUrl": "https://www.google.com",
+    "shortUrl": "trumpasUrl",
+    "expireInDays": 3
+}
+```
+Response body
+```json
+{
+	"id": 1,
+	"userId": 1,
+	"originalUrl": "https:\/\/www.google.com",
+	"shortUrl": "http:\/\/localhost\/trumpasUrl",
+	"expiryDate": "2024-03-12"
+}
+```
+#### Delete 
+DELETE /api/short-url/{id}
+
+#### Redirect
+GET /{key}
+
+Redirects you to the assigned url
 
 ## Assumptions
 - Only registered users can create short urls (not allowing to create fields without user ID)
