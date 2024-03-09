@@ -1,66 +1,66 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Bitlis
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Setup
 
-## About Laravel
+### Project
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+TODO
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Database
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+This project is using sqlite, first you'll need to create a file for storing the data. Run the following from the base 
+project directory
+```
+touch database/database.sqlite
+```
+Go to .env file and update <b>DB_DATABASE</b> field with absolute path to the file you've just created
 
-## Learning Laravel
+Now you can run migrations and seeds. This will create 10 users. You can use those ids for initial testing 
+It will also populate the reserved urls table.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```
+php artisan migrate --seed
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Calling endpoints
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Make sure you include the following in your headers
+```
+Accept: application/json
+```
 
-## Laravel Sponsors
+## Assumptions
+- Only registered users can create short urls (not allowing to create fields without user ID)
+- Since a database change is a possible thing I gave myself liberty to choose sqlite
+- Authentication is not part of the task
+- Reserved urls are treated as regular taken urls, meaning I'm not explaining that it's reserved, I just say it's 
+already taken
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Not implemented
+- Authentication
+- DTOs
+- CRUD for reserved urls
+- Not specified CRUD for short urls
 
-### Premium Partners
+## Possible improvements
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Implement API Resources to have control of what's returned and how things are formatted (eg. dates)
+- Not an improvement, but consideration for variable, table and column namings. Instead of  having
+  short_urls.original_url and short_urls.short_url fields it'd be possible to name them urls.original and urls.short
+  to avoid redundancy but all of that depends on developer and team preference.
+- Authentication of course. Now there is no protection and everyone can delete everything. Saying this user id should 
+not be passed in body of request, rather authentication token should be passed and user identified that way.
+- Implement DTOs to pass data in structured way instead of arrays
+- Be more flexible with original url format (don't require https://) by implementing custom rules
+- Swagger for docs
+- Store expire in days choice to see how long was it maintained. Now I'm only getting expireInDays int and converting 
+it to date straight away
+- Exception handling so opening a link the error message doesn't show the model name
+- Not a possible but a must improvement is to adjust random short url generation so that it doesn't fail if random is
+accidentally repeated. I'd do this in connection with a DTO implementation. I'd leave shortUrl parameter as nullable,
+create a generateRandomUrl() method and try to create the record in a loop until it succeeds. Alternatively more 
+predictable random password generation would be possible, then there would be less guessing. Saying that it's already
+clear that some sort of logging is needed if the DB gets too full, and we start running out of free urls. Then we could
+adjust the length of url, take decision on what to do with expired urls (delete, flag, archive).
+- Short url passed as empty string could be generated randomly instead of being rejected
+- Case sensitivity for short urls. Decision needed on how should they be handled and treated.
